@@ -1,19 +1,22 @@
-describe("Login", () => {
-  it("Realizar login com sucesso", () => {
-    cy.visit("https://www.saucedemo.com/");
+import login from "../pages/login";
 
+describe("Login", () => {
+  beforeEach(() => {
+    // Arrange
+    cy.visit("https://www.saucedemo.com/");
+  });
+  it("Realizar login com sucesso", () => {
     // Act
-    cy.get('[data-test="username"]').type("standard_user");
-    cy.get('[data-test="password"]').type("secret_sauce");
-    cy.get('[data-test="login-button"]').click();
-    cy.screenshot("login");
+
+    login.preencherCredenciaisValidas();
+
     // Assert
+    cy.screenshot("login");
+
     cy.url().should("eq", "https://www.saucedemo.com/inventory.html");
   });
 
   it.only("Realizar login informando credenciais inválidas", () => {
-    // Arrange
-    cy.visit("https://www.saucedemo.com/");
     // Act
     cy.get('[data-test="username"]').type("user.invalid");
     cy.get('[data-test="password"]').type("senha");

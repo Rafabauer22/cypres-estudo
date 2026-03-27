@@ -1,5 +1,5 @@
-describe('Carrinho', () => {
-  it("Adicionar produto ao carrinho com sucesso", () => {
+describe("Carrinho", () => {
+  beforeEach(() => {
     // Arrange
     cy.visit("https://www.saucedemo.com/");
 
@@ -8,11 +8,13 @@ describe('Carrinho', () => {
     cy.get("[data-test=password]").type("secret_sauce");
 
     cy.get('[data-test="login-button"]').click();
+  });
 
+  it("Adicionar produto ao carrinho com sucesso", () => {
     // Act
     cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click();
-   
- cy.screenshot('produto adicionado')
+
+    cy.screenshot("produto adicionado");
 
     // Assert
     cy.get(".shopping_cart_badge").should("be.visible").and("have.text", "1");
@@ -21,28 +23,19 @@ describe('Carrinho', () => {
 
     cy.contains("Sauce Labs Backpack").should("be.visible");
   });
-  
-   it('Remover produto do carrinho com sucesso', () => {
 
-  // Arrange
-  cy.visit('https://www.saucedemo.com/')
+  it("Remover produto do carrinho com sucesso", () => {
+    // Arrange
 
-  cy.get('[data-test="username"]').type('problem_user')
+    cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click();
 
-  cy.get('[data-test=password]').type('secret_sauce')
+    cy.get(".shopping_cart_badge").should("be.visible");
 
-  cy.get('[data-test="login-button"]').click()
+    // Act
+    cy.get('[data-test="remove-sauce-labs-backpack"]').click();
 
-  cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
+    cy.screenshot("produto removido");
 
-  cy.get('.shopping_cart_badge')
-    .should('be.visible')
-
-  // Act
-  cy.get('[data-test="remove-sauce-labs-backpack"]').click()
-
-  cy.screenshot('produto removido')
-
-  // Assert
-})
-})
+    // Assert
+  });
+});
