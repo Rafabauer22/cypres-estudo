@@ -4,22 +4,29 @@ import Inventory from "../pages/inventory";
 describe("Login", () => {
   beforeEach(() => {
     // Arrange
-    Login.visitarPagina();
+    cy.visit("/");
   });
 
-  it("Realizar login com sucesso", () => {
+  it.only("Realizar login com sucesso", () => {
     // Act
-    Login.preencherCredenciaisValidas();
+    cy.get('[data-test="username"]').type(Cypress.env("username"));
+
+    cy.get('[data-test="password"]').type(Cypress.env("password"));
+
+    cy.get('[data-test="login-button"]').click();
 
     // Assert
-    Inventory.validarAcessoAPagina();
+    cy.url().should("eq", "https://www.saucedemo.com/inventory.html");
+
+    cy.screenshot("login");
   });
 
   it("Realizar login informando credenciais inválidas", () => {
     // Act
-    Login.preencheCredenciaisInvalidas();
+    cy.get('[data-test="username"]').type("user.invalid");
 
-    // Assert
-    Login.validarErroCredenciaisInvalidas();
+    cy.get('[data-test="password"]').type("senha");
+
+    cy.get('[data-test="login-button"]').click();
   });
 });
